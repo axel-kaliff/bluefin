@@ -44,6 +44,9 @@ RUN --mount=type=cache,dst=/var/cache/libdnf5 \
 # This is for downstream images/stuff like k0s
 RUN rm -rf /opt && ln -s /var/opt /opt
 
+COPY build_files/shared/manage-containerd-sysext.sh /usr/libexec/bluefin-manage-containerd
+RUN chmod +x /usr/libexec/bluefin-manage-containerd
+
 CMD ["/sbin/init"]
 
 RUN bootc container lint
