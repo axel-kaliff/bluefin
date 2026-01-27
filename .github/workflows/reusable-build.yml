@@ -208,7 +208,12 @@ jobs:
 
       - name: Sign container image
         if: github.event_name != 'pull_request'
+        continue-on-error: true
         run: |
+          if [[ -z "$COSIGN_PRIVATE_KEY" ]]; then
+            echo "Skipping signing: SIGNING_SECRET not configured"
+            exit 0
+          fi
           cosign sign -y --key env://COSIGN_PRIVATE_KEY ${{ steps.registry_case.outputs.lowercase }}/${{ env.IMAGE_NAME }}@${TAGS}
         env:
           TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
@@ -217,8 +222,13 @@ jobs:
 
       - name: Sign container image
         if: github.event_name != 'pull_request' && contains(matrix.image_flavor, 'hwe')
+        continue-on-error: true
         shell: bash
         run: |
+          if [[ -z "$COSIGN_PRIVATE_KEY" ]]; then
+            echo "Skipping signing: SIGNING_SECRET not configured"
+            exit 0
+          fi
           image_name="${{ env.IMAGE_NAME }}"
         env:
           TAGS: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
