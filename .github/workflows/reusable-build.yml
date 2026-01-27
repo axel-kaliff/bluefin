@@ -243,12 +243,17 @@ jobs:
 
       - name: Add SBOM Attestation
         if: github.event_name != 'pull_request'
+        continue-on-error: true
         env:
           IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           DIGEST: ${{ steps.push.outputs.outputs && fromJSON(steps.push.outputs.outputs).digest }}
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           SBOM_OUTPUT: ${{ steps.generate-sbom.outputs.OUTPUT_PATH }}
         run: |
+          if [[ -z "$COSIGN_PRIVATE_KEY" ]]; then
+            echo "Skipping SBOM attestation: SIGNING_SECRET not configured"
+            exit 0
+          fi
           cd "$(dirname "$SBOM_OUTPUT")"
           cosign attest -y \
             --predicate ./sbom.json \
