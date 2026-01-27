@@ -3,9 +3,7 @@ rechunker_image := "ghcr.io/ublue-os/legacy-rechunk:v1.0.1-x86_64@sha256:2627cbf
 common_image := "ghcr.io/projectbluefin/common:latest"
 brew_image := "ghcr.io/ublue-os/brew:latest"
 images := '(
-    [bluefin]=bluefin
     [bluefin-dx]=bluefin-dx
-    [bluefin-cosmic]=bluefin-cosmic
     [bluefin-cosmic-dx]=bluefin-cosmic-dx
 )'
 flavors := '(
