@@ -133,9 +133,9 @@ copr_install_isolated "ublue-os/packages" "uupd"
 # Download and install with --replacefiles to handle the conflict
 dnf5 -y copr enable pgdev/ghostty
 dnf5 -y copr disable pgdev/ghostty
-dnf5 -y download --enablerepo=copr:copr.fedorainfracloud.org:pgdev:ghostty ghostty
-rpm -ivh --replacefiles ghostty-*.rpm
-rm -f ghostty-*.rpm
+dnf5 -y download --arch=x86_64 --enablerepo=copr:copr.fedorainfracloud.org:pgdev:ghostty ghostty
+rpm -ivh --replacefiles ./ghostty-*.x86_64.rpm
+rm -f ./ghostty-*.rpm
 
 # Version-specific COPR packages
 # case "$FEDORA_MAJOR_VERSION" in
