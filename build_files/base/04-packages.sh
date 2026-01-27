@@ -84,6 +84,7 @@ FEDORA_PACKAGES=(
     waypipe
     wireguard-tools
     wl-clipboard
+    xdg-terminal-exec
     xprop
     zenity
     zsh
