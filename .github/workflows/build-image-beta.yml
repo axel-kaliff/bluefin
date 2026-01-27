@@ -21,12 +21,8 @@ jobs:
     name: Build Beta Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
-    strategy:
-      fail-fast: false
-      matrix:
-        brand_name: ["bluefin"]
     with:
-      brand_name: ${{ matrix.brand_name }}
+      base_names: '["bluefin", "bluefin-dx", "bluefin-cosmic", "bluefin-cosmic-dx"]'
       stream_name: beta
 
   generate-release:

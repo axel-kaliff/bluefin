@@ -20,13 +20,9 @@ jobs:
     name: Build Latest Images
     uses: ./.github/workflows/reusable-build.yml
     secrets: inherit
-    strategy:
-      fail-fast: false
-      matrix:
-        brand_name: ["bluefin"]
     with:
-      image_flavors: '["main", "nvidia-open"]'
-      brand_name: ${{ matrix.brand_name }}
+      image_flavors: '["main"]'
+      base_names: '["bluefin-dx", "bluefin-cosmic-dx"]'
       stream_name: latest
 
   generate-release:

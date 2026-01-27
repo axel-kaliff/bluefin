@@ -3,13 +3,12 @@ on:
   workflow_call:
     inputs:
       image_flavors:
-        description: "JSON string of flavors to build, '[main, nvidia]'"
-        default: "['main', 'nvidia-open']"
+        description: "JSON string of flavors to build, '[\"main\", \"nvidia-open\"]'"
+        default: '["main", "nvidia-open"]'
         type: string
-      brand_name:
-        description: "The Brand Name: bluefin"
+      base_names:
+        description: "JSON string of base image names to build"
         required: true
-        default: bluefin
         type: string
       stream_name:
         description: "The Fedora Version: gts, stable, or latest"
@@ -23,7 +22,7 @@ env:
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.brand_name}}-${{ inputs.stream_name }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}-${{ inputs.stream_name }}
   cancel-in-progress: true
 
 jobs:
@@ -35,11 +34,7 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
-        base_name:
-          - ${{ inputs.brand_name }}
-          - ${{ inputs.brand_name }}-dx
-          - ${{ inputs.brand_name }}-cosmic
-          - ${{ inputs.brand_name }}-cosmic-dx
+        base_name: ${{ fromJson(inputs.base_names) }}
         stream_name:
           - ${{ inputs.stream_name }}
 
