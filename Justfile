@@ -5,6 +5,8 @@ brew_image := "ghcr.io/ublue-os/brew:latest"
 images := '(
     [bluefin]=bluefin
     [bluefin-dx]=bluefin-dx
+    [bluefin-cosmic]=bluefin-cosmic
+    [bluefin-cosmic-dx]=bluefin-cosmic-dx
 )'
 flavors := '(
     [main]=main
@@ -117,7 +119,11 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     brew_image_sha=$(yq -r '.images[] | select(.name == "brew") | .digest' image-versions.yml)
 
     # Base Image
-    base_image_name="silverblue"
+    if [[ "${image}" =~ cosmic ]]; then
+        base_image_name="base"
+    else
+        base_image_name="silverblue"
+    fi
 
 
     # AKMODS Flavor and Kernel Version
@@ -183,6 +189,9 @@ build $image="bluefin" $tag="latest" $flavor="main" rechunk="0" ghcr="0" pipelin
     if [[ "${image}" =~ dx ]]; then
         BUILD_ARGS+=("--build-arg" "IMAGE_FLAVOR=dx")
         target="dx"
+    fi
+    if [[ "${image}" =~ cosmic ]]; then
+        BUILD_ARGS+=("--build-arg" "IMAGE_COSMIC=1")
     fi
     BUILD_ARGS+=("--build-arg" "AKMODS_FLAVOR=${akmods_flavor}")
     BUILD_ARGS+=("--build-arg" "BASE_IMAGE_NAME=${base_image_name}")

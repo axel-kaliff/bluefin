@@ -38,17 +38,32 @@ IMPORTANT_PACKAGES=(
     distrobox
     fish
     flatpak
-    mutter
     pipewire
-    gnome-shell
-    ptyxis
-    gdm
     systemd
     tailscale
     uupd
     wireplumber
     zsh
 )
+
+# Add DE-specific packages
+if [[ "${IMAGE_COSMIC:-0}" == "1" ]]; then
+    # COSMIC-specific packages
+    IMPORTANT_PACKAGES+=(
+        cosmic-comp
+        cosmic-session
+        cosmic-panel
+        cosmic-greeter
+    )
+else
+    # GNOME-specific packages
+    IMPORTANT_PACKAGES+=(
+        mutter
+        gnome-shell
+        ptyxis
+        gdm
+    )
+fi
 
 for package in "${IMPORTANT_PACKAGES[@]}"; do
     rpm -q "${package}" >/dev/null || { echo "Missing package: ${package}... Exiting"; exit 1 ; }

@@ -31,6 +31,7 @@ ARG SHA_HEAD_SHORT="dedbeef"
 ARG UBLUE_IMAGE_TAG="stable"
 ARG VERSION=""
 ARG IMAGE_FLAVOR=""
+ARG IMAGE_COSMIC="0"
 
 # Build, cleanup, lint.
 RUN --mount=type=cache,dst=/var/cache/libdnf5 \

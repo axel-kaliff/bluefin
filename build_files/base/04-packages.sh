@@ -37,7 +37,6 @@ FEDORA_PACKAGES=(
     gcc
     git-credential-libsecret
     glow
-    gnome-tweaks
     gum
     hplip
     ibus-mozc
@@ -58,7 +57,6 @@ FEDORA_PACKAGES=(
     make
     mesa-libGLU
     mozc
-    nautilus-gsconnect
     oddjob-mkhomedir
     opendyslexic-fonts
     openssh-askpass
@@ -90,6 +88,14 @@ FEDORA_PACKAGES=(
     zenity
     zsh
 )
+
+# GNOME-specific packages (skip for COSMIC)
+if [[ "${IMAGE_COSMIC:-0}" != "1" ]]; then
+    FEDORA_PACKAGES+=(
+        gnome-tweaks
+        nautilus-gsconnect
+    )
+fi
 
 # Version-specific Fedora package additions
 case "$FEDORA_MAJOR_VERSION" in
@@ -157,6 +163,22 @@ case "$FEDORA_MAJOR_VERSION" in
         EXCLUDED_PACKAGES+=(gnome-software cosign)
         ;;
 esac
+
+# For COSMIC builds, exclude GNOME components
+if [[ "${IMAGE_COSMIC:-0}" == "1" ]]; then
+    EXCLUDED_PACKAGES+=(
+        gnome-shell
+        gnome-session
+        gnome-session-xsession
+        gnome-control-center
+        gnome-control-center-filesystem
+        gnome-settings-daemon
+        gnome-initial-setup
+        gnome-classic-session
+        mutter
+        gdm
+    )
+fi
 
 # Remove excluded packages if they are installed
 if [[ "${#EXCLUDED_PACKAGES[@]}" -gt 0 ]]; then
