@@ -127,6 +127,9 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 # From ublue-os/packages
 copr_install_isolated "ublue-os/packages" "uupd"
 
+# From pgdev/ghostty - Ghostty terminal emulator
+copr_install_isolated "pgdev/ghostty" "ghostty"
+
 # Version-specific COPR packages
 # case "$FEDORA_MAJOR_VERSION" in
 #    42)
