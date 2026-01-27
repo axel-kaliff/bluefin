@@ -1,0 +1,54 @@
+name: Weekly Sync and Build
+on:
+  schedule:
+    # Run every Sunday at 00:00 UTC
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync-upstream:
+    name: Sync from Upstream
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/ublue-os/bluefin.git
+
+      - name: Fetch upstream
+        run: git fetch upstream main
+
+      - name: Merge upstream changes
+        run: git merge upstream/main --no-edit
+
+      - name: Push to origin
+        run: git push origin main
+
+  trigger-build:
+    name: Trigger Latest Images Build
+    needs: sync-upstream
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger build workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-image-latest-main.yml',
+              ref: 'main'
+            })
