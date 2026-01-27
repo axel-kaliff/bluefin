@@ -129,11 +129,13 @@ copr_install_isolated "che/nerd-fonts" "nerd-fonts"
 copr_install_isolated "ublue-os/packages" "uupd"
 
 # From pgdev/ghostty - Ghostty terminal emulator
-# Remove conflicting terminfo file from ncurses-term before installing
-rm -f /usr/share/terminfo/g/ghostty
+# ncurses-term now includes ghostty terminfo, causing a conflict
+# Download and install with --replacefiles to handle the conflict
 dnf5 -y copr enable pgdev/ghostty
 dnf5 -y copr disable pgdev/ghostty
-dnf5 -y install --enablerepo=copr:copr.fedorainfracloud.org:pgdev:ghostty ghostty
+dnf5 -y download --enablerepo=copr:copr.fedorainfracloud.org:pgdev:ghostty ghostty
+rpm -ivh --replacefiles ghostty-*.rpm
+rm -f ghostty-*.rpm
 
 # Version-specific COPR packages
 # case "$FEDORA_MAJOR_VERSION" in
