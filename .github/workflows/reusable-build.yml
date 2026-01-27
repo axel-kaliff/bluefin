@@ -35,8 +35,13 @@ jobs:
       fail-fast: false
       matrix:
         image_flavor: ${{ fromJson(inputs.image_flavors) }}
-        base_name: ["${{ inputs.brand_name }}", "${{ inputs.brand_name }}-dx", "${{ inputs.brand_name }}-cosmic", "${{ inputs.brand_name }}-cosmic-dx"]
-        stream_name: ["${{ inputs.stream_name }}"]
+        base_name:
+          - ${{ inputs.brand_name }}
+          - ${{ inputs.brand_name }}-dx
+          - ${{ inputs.brand_name }}-cosmic
+          - ${{ inputs.brand_name }}-cosmic-dx
+        stream_name:
+          - ${{ inputs.stream_name }}
 
     steps:
       - name: Checkout
