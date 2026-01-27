@@ -130,7 +130,8 @@ copr_install_isolated "ublue-os/packages" "uupd"
 
 # From pgdev/ghostty - Ghostty terminal emulator
 # ncurses-term now includes ghostty terminfo, causing a conflict
-# Download and install with --replacefiles to handle the conflict
+# Install dependency first, then use rpm --replacefiles
+dnf5 -y install zlib-ng
 dnf5 -y copr enable pgdev/ghostty
 dnf5 -y copr disable pgdev/ghostty
 dnf5 -y download --arch=x86_64 --enablerepo=copr:copr.fedorainfracloud.org:pgdev:ghostty ghostty
