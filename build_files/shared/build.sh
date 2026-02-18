@@ -38,9 +38,6 @@ if [ "${IMAGE_COSMIC:-0}" != "1" ] ; then
   /ctx/build_files/shared/build-gnome-extensions.sh
 fi
 
-# Get Firmare for Framework
-/ctx/build_files/base/08-firmware.sh
-
 ## late stage changes
 
 # Systemd and Remove Items
